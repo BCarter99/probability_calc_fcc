@@ -37,33 +37,17 @@ def experiment(hat, expected_balls, num_balls_drawn, num_experiments):
     '''
     Returns the probability of a given set of colors being picked from the original set
     '''
-
-    print('num balls drawn', num_balls_drawn)
-
     guessed_right = 0
     for i in range(num_experiments):
         content_copy = copy.deepcopy(hat)
         expected_balls_copy = copy.deepcopy(expected_balls)
         # draw x amount of times
-        print('drew again')
         drawn_balls = content_copy.draw(num_balls_drawn)
         if drawn_balls != False:
             # compare drawn_balls to ideal_balls. If element in drawn_balls in expected balls, remove from drawn_balls
             for color in drawn_balls:
-
-                print(color)
-
                 if color in expected_balls_copy:
-
-
-                    print('Drawn', drawn_balls)
-                    print('color', color)
-                    print('ideal', expected_balls_copy)
-
-
                     expected_balls_copy[color] -= 1
-
-                    print('ideal2', expected_balls_copy)
                 else:
                     continue
         else:
@@ -72,12 +56,7 @@ def experiment(hat, expected_balls, num_balls_drawn, num_experiments):
         if all(value < 1 for value in expected_balls_copy.values()):
             guessed_right += 1
 
-        print('guessed', guessed_right)
-
-
     # estimate probability by number of times guess was correct / number of experiments
     probability = guessed_right / num_experiments
-
-    print(guessed_right, num_experiments)
 
     return probability
