@@ -26,7 +26,10 @@ class Hat():
                 ball = random.choice(self.contents)
                 drawn_balls.append(ball)
                 self.contents.remove(ball)
-        return drawn_balls
+            return drawn_balls
+        else:
+            print('not enough balls')
+            return False
 
 
 
@@ -44,24 +47,27 @@ def experiment(hat, expected_balls, num_balls_drawn, num_experiments):
         # draw x amount of times
         print('drew again')
         drawn_balls = content_copy.draw(num_balls_drawn)
-        # compare drawn_balls to ideal_balls. If element in drawn_balls in expected balls, remove from drawn_balls
-        for color in drawn_balls:
+        if drawn_balls != False:
+            # compare drawn_balls to ideal_balls. If element in drawn_balls in expected balls, remove from drawn_balls
+            for color in drawn_balls:
 
-            print(color)
+                print(color)
 
-            if color in expected_balls_copy:
-
-
-                print('Drawn', drawn_balls)
-                print('color', color)
-                print('ideal', expected_balls_copy)
+                if color in expected_balls_copy:
 
 
-                expected_balls_copy[color] -= 1
+                    print('Drawn', drawn_balls)
+                    print('color', color)
+                    print('ideal', expected_balls_copy)
 
-                print('ideal2', expected_balls_copy)
-            else:
-                continue
+
+                    expected_balls_copy[color] -= 1
+
+                    print('ideal2', expected_balls_copy)
+                else:
+                    continue
+        else:
+            return 1.0
 
         if all(value < 1 for value in expected_balls_copy.values()):
             guessed_right += 1
