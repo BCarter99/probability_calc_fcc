@@ -9,7 +9,7 @@ class Hat():
         '''
         self.contents = []
         for key, value in kwargs.items():
-            for color in range(value):
+            for i in range(value):
                 self.contents.append(str(key))
 
 
@@ -19,17 +19,14 @@ class Hat():
         not return to the hat during the draw. If the number of balls to draw exceeds the available quantity,
         return all the balls
         '''
-        contents_copy = copy.deepcopy(self.contents)
         drawn_balls = []
         if len(self.contents) > num_to_draw:
             # use random import to remove a random item from the list, adding it to another list
-            for i in range(0, num_to_draw):
-                ball = random.choice(contents_copy)
+            for i in range(num_to_draw):
+                ball = random.choice(self.contents)
                 drawn_balls.append(ball)
-                contents_copy.remove(ball)
-            return drawn_balls
-        else:
-            return self.contents
+                self.contents.remove(ball)
+        return drawn_balls
 
 
 
@@ -41,40 +38,35 @@ def experiment(hat, expected_balls, num_balls_drawn, num_experiments):
     print('num balls drawn', num_balls_drawn)
 
     guessed_right = 0
-    expected_balls_copy = copy.deepcopy(expected_balls)
     for i in range(num_experiments):
+        content_copy = copy.deepcopy(hat)
+        expected_balls_copy = copy.deepcopy(expected_balls)
         # draw x amount of times
         print('drew again')
-        drawn_balls = hat.draw(num_balls_drawn)
+        drawn_balls = content_copy.draw(num_balls_drawn)
         # compare drawn_balls to ideal_balls. If element in drawn_balls in expected balls, remove from drawn_balls
         for color in drawn_balls:
-            print('Drawn1', drawn_balls)
 
-            if (color in expected_balls):
+            print(color)
+
+            if color in expected_balls_copy:
 
 
                 print('Drawn', drawn_balls)
                 print('color', color)
-                print('ideal', expected_balls)
+                print('ideal', expected_balls_copy)
 
 
-                expected_balls[color] -= 1
+                expected_balls_copy[color] -= 1
 
-                print('ideal2', expected_balls)
+                print('ideal2', expected_balls_copy)
+            else:
+                continue
 
-        ideal_balls = []
-        # creates a list similar to self.contents, in order to compare the two
-        for key, value in expected_balls.items():
-            for i in range(len(expected_balls)):
-                if value > 0:
-                    ideal_balls.append(str(key))
-
-        # if ideal_balls empty, +1 for how many times it was equal
-        if len(ideal_balls) < 1:
+        if all(value < 1 for value in expected_balls_copy.values()):
             guessed_right += 1
 
-        expected_balls = expected_balls_copy
-        continue
+        print('guessed', guessed_right)
 
 
     # estimate probability by number of times guess was correct / number of experiments
